@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Algorithm Visualizer</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Interactive Algorithm Visualizer</h1>
+            <p>Visualize how different sorting algorithms work with real-time animations and step-by-step execution</p>
+        </header>
+
+        <div class="main-content">
+            <div class="controls-panel">
+                <div class="control-group">
+                    <h3><i class="fas fa-sliders-h"></i> Controls</h3>
+                    <div class="input-group">
+                        <input type="number" id="array-size" min="5" max="100" value="30" class="array-input">
+                        <button id="generate-array" class="btn-primary">
+                            <i class="fas fa-random"></i> Generate
+                        </button>
+                    </div>
+                    
+                    <div class="slider-container">
+                        <label for="speed-slider">Animation Speed</label>
+                        <input type="range" id="speed-slider" class="range-slider" min="1" max="100" value="50">
+                    </div>
+                </div>
+                
+                <div class="control-group">
+                    <h3><i class="fas fa-sort-amount-down"></i> Algorithms</h3>
+                    <div class="algo-list">
+                        <div class="algo-item selected" data-algo="bubble">Bubble Sort</div>
+                        <div class="algo-item" data-algo="quick">Quick Sort</div>
+                        <div class="algo-item" data-algo="merge">Merge Sort</div>
+                        <div class="algo-item" data-algo="insertion">Insertion Sort</div>
+                        <div class="algo-item" data-algo="selection">Selection Sort</div>
+                        <div class="algo-item" data-algo="heap">Heap Sort</div>
+                        <div class="algo-item" data-algo="radix">Radix Sort</div>
+                        <div class="algo-item" data-algo="shell">Shell Sort</div>
+                    </div>
+                </div>
+                
+                <div class="control-group">
+                    <h3><i class="fas fa-play-circle"></i> Actions</h3>
+                    <button id="sort-btn" class="btn-success">
+                        <i class="fas fa-play"></i> Start Sorting
+                    </button>
+                    <button id="pause-btn" class="btn-warning" disabled>
+                        <i class="fas fa-pause"></i> Pause
+                    </button>
+                    <button id="reset-btn" class="btn-danger">
+                        <i class="fas fa-redo"></i> Reset
+                    </button>
+                </div>
+            </div>
+            
+            <div class="visualization-area">
+                <div class="array-container" id="array-container"></div>
+                
+                <div class="stats">
+                    <div class="stat-item">
+                        <div class="value" id="comparisons">0</div>
+                        <div class="label">Comparisons</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="value" id="swaps">0</div>
+                        <div class="label">Swaps</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="value" id="time">0ms</div>
+                        <div class="label">Time</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="value" id="operations">0</div>
+                        <div class="label">Operations</div>
+                    </div>
+                </div>
+                
+                <div class="info-panel">
+                    <div class="complexity-card">
+                        <h3><i class="fas fa-clock"></i> Time Complexity</h3>
+                        <div class="value" id="time-complexity">O(n²)</div>
+                        <div class="description">Average case performance for this algorithm</div>
+                    </div>
+                    <div class="complexity-card">
+                        <h3><i class="fas fa-memory"></i> Space Complexity</h3>
+                        <div class="value" id="space-complexity">O(1)</div>
+                        <div class="description">Memory usage during sorting</div>
+                    </div>
+                    <div class="complexity-card">
+                        <h3><i class="fas fa-info-circle"></i> Algorithm Info</h3>
+                        <div class="description" id="algo-description">
+                            Bubble sort repeatedly steps through the list, compares adjacent elements and swaps them if they are in the wrong order.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>Interactive Algorithm Visualizer | Created with HTML, CSS & JavaScript</p>
+            <p>Visualize, Learn, Understand</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
