@@ -29,17 +29,34 @@ body {
   min-height: 100vh;
   padding: 20px;
   overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background 0.5s ease;
+  background-attachment: fixed;
+  background-size: 400% 400%;
+  animation: gradientAnimation 15s ease infinite;
 }
 
 .container {
   max-width: 1400px;
   margin: 0 auto;
+  width: 90%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding-bottom: 20px;
 }
 
 header {
   text-align: center;
   padding: 20px 0;
   margin-bottom: 20px;
+  animation: fadeInDown 1s ease forwards;
 }
 
 header h1 {
@@ -50,6 +67,12 @@ header h1 {
   background-clip: text;
   -webkit-text-fill-color: transparent;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  font-style: italic;
+  transition: all 0.3s ease;
+  cursor: default;
 }
 
 header p {
@@ -57,17 +80,28 @@ header p {
   max-width: 700px;
   margin: 0 auto 20px;
   color: #e0e0e0;
+  font-style: italic;
+  letter-spacing: 0.03em;
+  line-height: 1.4;
+  transition: color 0.3s ease;
+  cursor: default;
 }
 
 .main-content {
   display: grid;
   grid-template-columns: 1fr;
   gap: 25px;
+  flex: 1;
+  animation: fadeInUp 1s ease forwards;
+  overflow: hidden;
 }
 
 @media (min-width: 992px) {
   .main-content {
     grid-template-columns: 280px 1fr;
+    align-items: start;
+    gap: 25px;
+    padding-bottom: 25px;
   }
 }
 
@@ -82,10 +116,16 @@ header p {
   flex-direction: column;
   gap: 20px;
   height: fit-content;
+  max-height: 80vh;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent) var(--light);
 }
 
 .control-group {
   margin-bottom: 15px;
+  transform: translateY(0);
+  transition: transform 0.3s ease;
 }
 
 .control-group h3 {
@@ -95,16 +135,25 @@ header p {
   display: flex;
   align-items: center;
   gap: 10px;
+  font-weight: 600;
+  text-transform: none;
+  font-style: normal;
+  letter-spacing: normal;
 }
 
 .control-group h3 i {
   color: var(--accent);
+  font-size: 1.2rem;
+  transition: transform 0.3s ease;
+  transform: translateY(0);
 }
 
 .input-group {
   display: flex;
   gap: 10px;
   margin-bottom: 15px;
+  flex-wrap: wrap;
+  align-items: center;
 }
 
 input,
@@ -116,6 +165,13 @@ button {
   font-size: 1rem;
   background: white;
   transition: all 0.3s ease;
+  width: 100%;
+  color: var(--dark);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  font-weight: 500;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
 }
 
 input:focus,
@@ -123,6 +179,7 @@ select:focus {
   outline: none;
   border-color: var(--accent);
   box-shadow: 0 0 0 3px rgba(72, 149, 239, 0.3);
+  transform: translateY(-2px);
 }
 
 button {
@@ -313,11 +370,15 @@ button:disabled {
   font-weight: 700;
   color: var(--primary);
   margin: 10px 0;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 .complexity-card .description {
   color: var(--gray);
   font-size: 0.95rem;
+  line-height: 1.4;
+  font-style: italic;
 }
 
 /* Stats */
@@ -329,6 +390,7 @@ button:disabled {
   padding: 15px;
   background: rgba(255, 255, 255, 0.15);
   border-radius: 10px;
+  justify-content: center;
 }
 
 .stat-item {
@@ -339,17 +401,23 @@ button:disabled {
   background: rgba(255, 255, 255, 0);
   border-radius: 8px;
   min-width: 120px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
 .stat-item .value {
   font-size: 1.5rem;
   font-weight: 700;
+  color: var(--dark);
   margin-bottom: 5px;
 }
 
 .stat-item .label {
   font-size: 0.9rem;
   opacity: 0.8;
+  color: var(--dark);
+  font-style: italic;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 /* Footer */
@@ -376,5 +444,8 @@ footer {
 
   .control-group h3 {
     font-size: 1.1rem;
+    font-style: italic;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
   }
 }
