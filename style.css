@@ -2,7 +2,13 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+:root {
+  --font-ui: "Inter", system-ui, -apple-system, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial;
+  --font-heading: "Poppins", "Inter", system-ui, -apple-system, "Segoe UI",
+    Roboto, Arial;
 }
 
 :root {
@@ -31,6 +37,7 @@ body {
   overflow-x: hidden;
   display: flex;
   flex-direction: column;
+  font-family: var(--font-ui);
   font-size: 16px;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
@@ -67,6 +74,7 @@ header h1 {
   background-clip: text;
   -webkit-text-fill-color: transparent;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  font-family: var(--font-heading);
   font-weight: 700;
   letter-spacing: 0.05em;
   text-transform: uppercase;
@@ -85,6 +93,7 @@ header p {
   line-height: 1.4;
   transition: color 0.3s ease;
   cursor: default;
+  font-family: var(--font-ui);
 }
 
 .main-content {
@@ -99,9 +108,18 @@ header p {
 @media (min-width: 992px) {
   .main-content {
     grid-template-columns: 280px 1fr;
-    align-items: start;
+    /* Stretch grid items so the controls-panel can match the visualization area's height */
+    align-items: stretch;
     gap: 25px;
     padding-bottom: 25px;
+  }
+
+  /* Ensure the controls panel stretches to the grid row height and scrolls internally if content overflows */
+  .main-content .controls-panel {
+    align-self: stretch;
+    height: auto; /* allow grid to control height */
+    max-height: none; /* don't constrain to viewport here */
+    overflow-y: auto; /* internal scroll if necessary */
   }
 }
 
@@ -131,6 +149,7 @@ header p {
 .control-group h3 {
   color: var(--dark);
   margin-bottom: 15px;
+  font-family: var(--font-heading);
   font-size: 1.3rem;
   display: flex;
   align-items: center;
@@ -146,6 +165,18 @@ header p {
   font-size: 1.2rem;
   transition: transform 0.3s ease;
   transform: translateY(0);
+}
+
+/* Actions button spacing - keep buttons slightly apart and wrap when needed */
+.actions-group {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.actions-group button {
+  margin: 0; /* gap handles spacing */
 }
 
 .input-group {
@@ -167,6 +198,7 @@ button {
   transition: all 0.3s ease;
   width: 100%;
   color: var(--dark);
+  font-family: var(--font-ui);
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   font-weight: 500;
   appearance: none;
@@ -239,6 +271,13 @@ button:disabled {
   font-weight: 500;
 }
 
+.speed-value {
+  margin-left: 8px;
+  font-weight: 600;
+  color: var(--primary);
+  font-size: 0.95rem;
+}
+
 .range-slider {
   -webkit-appearance: none;
   appearance: none;
@@ -297,25 +336,76 @@ button:disabled {
 /* Visualization Area */
 .visualization-area {
   background: var(--card-bg);
-  border-radius: 15px;
+  /* Responsive rounded corners that scale with viewport while remaining bounded */
+  border-radius: clamp(12px, 1.6vw, 24px);
   padding: 25px;
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
   backdrop-filter: blur(10px);
-  min-height: 500px;
+  min-height: auto;
   display: flex;
   flex-direction: column;
+  position: relative; /* for absolute cap indicator */
+  /* Clip child content to maintain the curved edges visually even when children overflow */
+  overflow: hidden;
 }
 
 .array-container {
-  flex: 1;
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column; /* stack bars row and index row */
+  align-items: stretch;
+  justify-content: flex-start;
+  gap: clamp(2px, 0.6vw, 10px);
+  padding: 20px;
+  padding-inline-end: 32px; /* ensure last bar remains visible */
+  min-height: 80px;
+  height: auto; /* let container shrink/grow with content */
+  max-height: calc(80vh - 120px);
+  overflow-x: auto; /* horizontal scroll when many bars */
+  overflow-y: auto; /* vertical scroll if bars taller than max-height */
+  flex-wrap: nowrap; /* keep bars in a single row so scrolling works predictably */
+  align-content: flex-end;
+  scroll-snap-type: x proximity; /* help bars snap into view when scrolling */
+  -webkit-overflow-scrolling: touch;
+  transition: min-height 300ms ease, height 300ms ease;
+  /* Slightly smaller radius than the visualization area so the inner panel sits nicely inside */
+  border-radius: clamp(8px, 1.2vw, 16px);
+  background: rgba(255, 255, 255, 0.7);
+}
+.bars-inner {
   display: flex;
   align-items: flex-end;
-  justify-content: center;
   gap: 2px;
-  padding: 20px;
-  min-height: 400px;
-  border-radius: 10px;
-  background: rgba(255, 255, 255, 0.7);
+}
+
+.bars-index {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 2px;
+  padding-top: 6px;
+}
+
+.index-item {
+  flex: 0 0 auto;
+  color: var(--dark);
+  font-weight: 600;
+  text-align: center;
+}
+
+/* Make each bar snap into view, and allow modest resizing to fit many bars */
+.array-container .array-bar {
+  scroll-snap-align: center;
+  flex: 0 0 auto;
+  min-width: 6px;
+  max-width: 40px;
+}
+
+/* End spacer so the final bar is not hidden by padding/scrollbar */
+.array-container::after {
+  content: "";
+  flex: 0 0 20px;
+  pointer-events: none;
 }
 
 .array-bar {
@@ -323,10 +413,147 @@ button:disabled {
   width: 20px;
   transition: height 0.3s ease, background-color 0.2s ease;
   border-radius: 4px 4px 0 0;
+  position: relative;
+  overflow: visible;
+  flex: 0 0 auto; /* prevent shrinking so overflow-x works */
+}
+
+.array-bar .bar-label {
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.7rem;
+  color: #ffffff;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 2px 6px;
+  border-radius: 4px;
+  white-space: nowrap;
+  display: none;
+  pointer-events: none;
+}
+
+.array-bar:hover .bar-label {
+  display: block;
+}
+
+/* Cap indicator badge */
+.cap-indicator {
+  position: absolute;
+  right: 18px;
+  top: 18px;
+  background: var(--warning);
+  color: #1d1d1d;
+  padding: 6px 10px;
+  border-radius: 20px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+  opacity: 0;
+  transform: translateY(-6px);
+  transition: opacity 0.25s, transform 0.25s;
+  pointer-events: none;
+}
+
+.cap-indicator.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Result message */
+.result-message {
+  position: absolute;
+  left: 24px;
+  top: 18px;
+  background: rgba(29, 53, 87, 0.9);
+  color: #fff;
+  padding: 8px 12px;
+  border-radius: 12px;
+  font-weight: 700;
+  display: none;
+  z-index: 40;
+}
+.result-message.show {
+  display: block;
+}
+
+/* Modal styles */
+.modal {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 100;
+}
+.modal[aria-hidden="false"],
+.modal.open {
+  display: flex;
+}
+.modal-content {
+  background: white;
+  color: var(--dark);
+  padding: 20px;
+  border-radius: 12px;
+  width: min(420px, 90%);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.modal-content h3 {
+  margin: 0;
+}
+.modal-content input[type="number"] {
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  font-size: 1rem;
+}
+.modal-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+.modal-note {
+  font-size: 0.92rem;
+  color: var(--gray);
 }
 
 .array-bar.highlight {
   background: var(--bar-highlight);
+}
+
+/* Binary search / range highlighting styles */
+.array-bar.range {
+  background: rgba(72, 149, 239, 0.9); /* blue-ish for range */
+}
+
+/* Linear search highlighting states */
+.array-bar.active {
+  background: rgba(255, 211, 85, 0.95); /* yellow - current */
+}
+
+.array-bar.fail {
+  background: rgba(231, 76, 60, 0.92); /* red - checked and not match */
+}
+
+.array-bar.mid {
+  background: rgba(255, 211, 85, 0.95); /* yellow for mid */
+}
+
+.array-bar.low {
+  outline: 2px solid rgba(66, 135, 245, 0.9);
+}
+
+.array-bar.high {
+  outline: 2px solid rgba(230, 57, 70, 0.85);
+}
+
+.array-bar.found {
+  background: rgba(76, 201, 120, 0.95); /* green */
+  box-shadow: 0 6px 18px rgba(76, 201, 120, 0.18);
 }
 
 .array-bar.sorted {

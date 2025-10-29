@@ -8,6 +8,13 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     />
+    <!-- Improved typography: Poppins for headings and Inter for UI/body -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Poppins:wght@600;700&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
@@ -39,7 +46,10 @@
             </div>
 
             <div class="slider-container">
-              <label for="speed-slider">Animation Speed</label>
+              <label for="speed-slider"
+                >Animation Speed
+                <span id="speed-value" class="speed-value"> </span
+              ></label>
               <input
                 type="range"
                 id="speed-slider"
@@ -47,6 +57,33 @@
                 min="1"
                 max="100"
                 value="50"
+                <!--
+                Linear
+                Search
+                Modal
+                --
+              />
+              <div id="linearSearchModal" class="modal" aria-hidden="true">
+                <div class="modal-content">
+                  <h3>Linear Search</h3>
+                  <p class="modal-note">
+                    Linear Search will check each element from left to right.
+                  </p>
+                  <input
+                    type="number"
+                    id="linearSearchValue"
+                    placeholder="Enter element to search"
+                  />
+                  <div class="modal-actions">
+                    <button id="startLinearSearch" class="btn-primary">
+                      Search
+                    </button>
+                    <button id="cancelLinearSearch" class="btn-danger">
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+              </div>
               />
             </div>
           </div>
@@ -64,10 +101,12 @@
               <div class="algo-item" data-algo="heap">Heap Sort</div>
               <div class="algo-item" data-algo="radix">Radix Sort</div>
               <div class="algo-item" data-algo="shell">Shell Sort</div>
+              <div class="algo-item" data-algo="binary">Binary Search</div>
+              <div class="algo-item" data-algo="linear">Linear Search</div>
             </div>
           </div>
 
-          <div class="control-group">
+          <div class="control-group actions-group">
             <h3><i class="fas fa-play-circle"></i> Actions</h3>
             <button id="sort-btn" class="btn-success">
               <i class="fas fa-play"></i> Start Sorting
@@ -82,7 +121,41 @@
         </div>
 
         <div class="visualization-area">
+          <div
+            id="height-cap-indicator"
+            class="cap-indicator"
+            aria-hidden="true"
+          >
+            Max height reached
+          </div>
           <div class="array-container" id="array-container"></div>
+
+          <!-- Result message for binary search or other quick feedback -->
+          <div
+            id="resultMessage"
+            class="result-message"
+            aria-live="polite"
+          ></div>
+
+          <!-- Binary Search Modal -->
+          <div id="binarySearchModal" class="modal" aria-hidden="true">
+            <div class="modal-content">
+              <h3>Binary Search</h3>
+              <p class="modal-note">
+                Binary Search requires a sorted array. The visualizer will sort
+                the array silently before searching.
+              </p>
+              <input
+                type="number"
+                id="searchValue"
+                placeholder="Enter element to search"
+              />
+              <div class="modal-actions">
+                <button id="startSearch" class="btn-primary">Search</button>
+                <button id="cancelSearch" class="btn-danger">Cancel</button>
+              </div>
+            </div>
+          </div>
 
           <div class="stats">
             <div class="stat-item">
